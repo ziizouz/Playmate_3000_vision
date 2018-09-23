@@ -1,5 +1,5 @@
 import MiddlleMan
-def start():
+def start(sharedData):
     while True:
         print("I2C process is running")
 
