@@ -1,29 +1,29 @@
 from multiprocessing import process
 import  MiddlleMan
 import TCP_manager
-import numpy as np
 
-def start():
+def start(sharedData, lock):
     com_manager = TCP_manager.TcpManagerClass()
-
+    midMan = MiddlleMan.MiddleMan(sharedData, lock)
     while True:
-        print("tcp_ip process is running")
+        #print("tcp_ip process is running")
         ###################################### Listening ####################################################################
-        request = com_manager.TCP_listener()
-        print(request)
+        command = com_manager.TCP_listener()
+        while True:
+            result = midMan.getCommand(command)
+            if result != None:
+                break
+        
         ##################################### End listerning ################################################################
 
+
         ##################################### Send requested data to master #################################################
-
-        # It should be something like this
-
-        # middle_man = middleman.class_name()
-        # response = middle_man.get(command=request)
-
         #### But, Just demo (response) to remove ###################
-        array = np.round(np.random.rand(2, 2))
-        arr_str = np.array2string(array)  # Generating some random numpy array and sending it as string as demo
-        print(arr_str)
+        #array = np.round(np.random.rand(2, 2))
+        #arr_str = np.array2string(array)  # Generating some random numpy array and sending it as string as demo
+        #print(arr_str)
         ################# Demo end ####################
 
-        com_manager.TCP_send(arr_str)  # send response
+        ###################################### Emitter ####################################################################
+        com_manager.TCP_send(str(result))  # send response
+        ####################################### End of emitter ###########################################################
